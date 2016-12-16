@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.7.1'
+}
+
+
+repositories {
+    jcenter()
+    mavenLocal()
+    maven {
+      url "https://plugins.gradle.org/m2/"}
+    maven {
+      url "http://maven.restlet.org"}
+}
+
+jar.archiveName = "oatsrestlet.jar"
+
+sourceCompatibility = 1.7
+
+group = 'it.inaf.oats'
+
+version = '1.0'
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+        	'Implementation-Version': version,
+        	'Main-Class': 'com.mkyong.DateUtils'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+dependencies {
+    compile 'log4j:log4j:1.2.+'
+    compile 'javax.servlet:javax.servlet-api:3.1.+'
+    compile 'org.restlet.jee:org.restlet:2.0.2'
+    compile 'org.restlet.jee:org.restlet.ext.servlet:2.0.2'
+    //compile files('/home/bertocco/opt/opencadc/lib/externals/org.restlet.ext.servlet-2.2-M5.jar')
+}
